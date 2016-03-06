@@ -118,9 +118,9 @@
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
     var answer = [];
-    for(var i = 0; i < collection.length; i++){
-      answer.push( iterator(collection[i] ));
-    }
+    _.each(collection, function(value){
+                            answer.push(iterator(value));
+                          });
     return answer;
   };
 
@@ -163,7 +163,26 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
-    
+    // var answer = accumulator;
+    // var start = 0 ;
+
+    // if( accumulator === undefined ){
+    //   answer = collection [0];
+    //   start = 1;
+    // }
+
+    // for( var i = start; i < collection.length; i++){
+    //   answer = iterator(answer,collection[i]);
+    // }    
+    var answer = accumulator;
+
+    _.each(collection, function(value, index){
+        if(answer === undefined && index === 0){
+            answer = collection[0];
+        } else answer = iterator(answer, value);                           
+      });      
+
+    return answer; 
   };
 
   // Determine if the array or object contains a given value (using `===`).
