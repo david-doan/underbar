@@ -261,6 +261,15 @@
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    var args = Array.prototype.slice.call(arguments); //will turn copy arguments object into array
+    return _.reduce(args, function(accum,next) { 
+            _.each(next, function(value,key){
+              if(!(key in accum) ) {
+                accum[key] = value;
+              }
+            });
+            return accum;
+      });
   };
 
 
