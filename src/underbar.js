@@ -245,6 +245,17 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    // arguments is not an array.  _.each treats arguments as an object, passing the keys/indexes
+    // as strings instead of integers. _.reduce assumes collection is an array, so indexes passed
+    // as strings will always false for when there is no initial value passed to reduce, causing
+    // look up errors
+    var args = Array.prototype.slice.call(arguments); //will turn copy arguments object into array
+    return _.reduce(args, function(accum,next) { 
+            _.each(next, function(value,key){
+              accum[key] = value;
+            });
+            return accum;
+      });
   };
 
   // Like extend, but doesn't ever overwrite a key that already
