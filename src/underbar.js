@@ -312,7 +312,43 @@
   // _.memoize should return a function that, when called, will check if it has
   // already computed the result for the given argument and return that value
   // instead if possible.
+  var deepEqual = function(a,b) {
+    if( typeof a === 'object' && typeof b === 'object' ) {
+      if( Object.keys(a).length === Object.keys(b).length ){
+        return _.every( a, function( value, key ) {
+          return deepEqual(value, b[key]);
+        });
+      } else{
+        return false;
+      }
+    } else {
+        return a === b;
+      }
+  }
+  
   _.memoize = function(func) {
+    var usedArguments = [];
+    var results = [];
+
+    return function(){
+      var args = Array.prototype.slice.call(arguments);
+      var mem = -1;
+      _.each( usedArguments, function( storedArgs, storedArgIndex ) {
+        var argsUsed = deepEqual(storedArgs,args);
+        if( argsUsed ){
+          mem = storedArgIndex;
+        }
+      });
+
+      if( mem > -1 ){
+        return results[mem];
+      } else{
+        usedArguments.push(args);
+        var result = func.apply(this, arguments);
+        results.push(result);
+        return result;
+      }
+    }
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -322,6 +358,9 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var args = Array.prototype.slice.call(arguments);
+    var passArgs = args.slice(1);
+
   };
 
 
