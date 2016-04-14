@@ -438,18 +438,6 @@
     }, answer);
   };
 
-  var test = function(){
-    var empty = [];
-    return _.reduce(arguments, function(accum, argVal,argIndex){
-      accum.push('argIndex: ' + argIndex);
-
-      accum.push('argVal: ' + argVal);
-      return accum;
-
-    },empty)
-  }
-
-
 
   // Takes a multidimensional array and converts it to a one-dimensional array.
   // The new array should contain all elements of the multidimensional array.
