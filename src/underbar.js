@@ -399,6 +399,13 @@
   // Calls the method named by functionOrKey on each value in the list.
   // Note: You will need to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
+    return _.map(collection, function(value) {
+      if(value[functionOrKey]){
+        return value[functionOrKey](args);
+      } else {
+        return functionOrKey.apply(value,args);  
+      }      
+    });    
   };
 
   // Sort the object's values by a criterion produced by an iterator.
@@ -406,6 +413,7 @@
   // of that string. For example, _.sortBy(people, 'name') should sort
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
+
   };
 
   // Zip together two or more arrays with elements of the same index
@@ -414,7 +422,34 @@
   // Example:
   // _.zip(['a','b','c','d'], [1,2,3]) returns [['a',1], ['b',2], ['c',3], ['d',undefined]]
   _.zip = function() {
+    var answer = [];
+    var answerLength = _.reduce(arguments, function(accum,element){
+      return element.length > accum ? element.length : accum;
+    },0);
+
+    return _.reduce(arguments, function(accum,argVal,argIndex){
+      for(var i = 0; i < answerLength; i++){
+        if(accum[i] === undefined){
+          accum[i] = [];
+        }
+        argVal[i] ? accum[i].push(argVal[i]) : accum[i].push(undefined);
+      }
+      return accum;
+    }, answer);
   };
+
+  var test = function(){
+    var empty = [];
+    return _.reduce(arguments, function(accum, argVal,argIndex){
+      accum.push('argIndex: ' + argIndex);
+
+      accum.push('argVal: ' + argVal);
+      return accum;
+
+    },empty)
+  }
+
+
 
   // Takes a multidimensional array and converts it to a one-dimensional array.
   // The new array should contain all elements of the multidimensional array.
