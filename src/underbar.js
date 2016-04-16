@@ -459,6 +459,18 @@
   // Takes an arbitrary number of arrays and produces an array that contains
   // every item shared between all the passed-in arrays.
   _.intersection = function() {
+    var everything = [];
+    var answer = [];
+    _.reduce(arguments, function(accum, argArr, index){
+        _.each(argArr, function(value,index){
+          if(_.indexOf(accum,value) > -1 && _.indexOf(answer, value) === -1) {
+            answer.push(value);
+          }
+          accum.push(value);
+        });
+        return accum;
+    },everything);
+    return answer;
   };
 
   // Take the difference between one array and a number of other arrays.
