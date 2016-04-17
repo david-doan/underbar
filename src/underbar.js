@@ -459,23 +459,22 @@
   // Takes an arbitrary number of arrays and produces an array that contains
   // every item shared between all the passed-in arrays.
   _.intersection = function() {
-    var everything = [];
-    var answer = [];
-    _.reduce(arguments, function(accum, argArr, index){
-        _.each(argArr, function(value,index){
-          if(_.indexOf(accum,value) > -1 && _.indexOf(answer, value) === -1) {
-            answer.push(value);
-          }
-          accum.push(value);
-        });
-        return accum;
-    },everything);
-    return answer;
+   var args = Array.prototype.slice.call(arguments);
+   var first = args[0];
+   return _.filter(first, function(value){
+        return _.every(args, function(array){
+          return _.contains(array,value);
+        })
+    })
   };
 
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
   _.difference = function(array) {
+    var common = _.intersection(arguments);
+    return _.reject(array, function(a){
+      return _.contains(common,a);
+    });
   };
 
   // Returns a function, that, when invoked, will only be triggered at most once
