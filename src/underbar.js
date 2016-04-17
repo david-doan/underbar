@@ -358,7 +358,7 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
-    setTimeout.apply(this,arguments);
+    return setTimeout.apply(window, arguments);
   };
 
 
@@ -471,10 +471,13 @@
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
   _.difference = function(array) {
-    var common = _.intersection(arguments);
-    return _.reject(array, function(a){
-      return _.contains(common,a);
-    });
+    var args = Array.prototype.slice.call(arguments).slice(1);
+    var first = array;
+      return _.reject(first, function(value){
+        return _.some(args, function(array){
+          return _.contains(array,value);
+        })
+    })
   };
 
   // Returns a function, that, when invoked, will only be triggered at most once
